@@ -8,6 +8,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         arr = new int[100000];
         cnt = 0;
 
@@ -22,27 +23,31 @@ public class Main {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 for (int k = 0; k <= cnt; k++) {
-                    memo[i][j][k] = -1;  // 방문하지 않은 상태는 -1로 설정
+                    memo[i][j][k] = -1;
                 }
             }
         }
 
-        System.out.println(dp(0, 0, 0));  // 시작 상태에서 최소 비용 찾기
+        bw.write(String.valueOf(dp(0, 0, 0)));
+        bw.flush();
+        bw.close();
+        br.close();
     }
 
-    static int dp(int left, int right, int idx) {
-        if (idx == cnt) return 0;  // 종료 조건: 모든 명령 수행 완료
-        if (memo[left][right][idx] != -1) return memo[left][right][idx];  // 이미 계산된 값 반환
+    public static int dp(int left, int right, int idx) {
+        if(idx == cnt) {
+            return 0;
+        }
+        if(memo[left][right][idx] != -1) {
+            return memo[left][right][idx];
+        }
 
         int next = arr[idx];
 
-        // 왼발 이동
         int moveLeft = dp(next, right, idx + 1) + cost[left][next];
-
-        // 오른발 이동
         int moveRight = dp(left, next, idx + 1) + cost[right][next];
 
-        // 최소 비용 저장
         return memo[left][right][idx] = Math.min(moveLeft, moveRight);
     }
+
 }
